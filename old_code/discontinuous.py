@@ -7,6 +7,9 @@ from torchvision import datasets
 import torchvision.transforms as transforms
 import sys
 
+
+from models import nn_continuous
+
 model_number = int(sys.argv[1])
 wrong_hint = sys.argv[2]
 wrong_eval = sys.argv[3]

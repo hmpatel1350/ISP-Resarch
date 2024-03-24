@@ -224,12 +224,7 @@ for epoch in range(1, n_epochs + 1):
             else:
                 random_integer = 0
 
-            base_guess[i][labels[i].item()] = 0.1 #+ 0.9 * s[i] / (2*size *size)
-
-        correct_label = torch.zeros(batch_size, 10)
-        for j, value in enumerate(labels):
-            index = value.item()
-            correct_label[j][index] = 1.0
+            base_guess[i][labels[i].item() - random_integer] = 0.1 #+ 0.9 * s[i] / (2*size *size)
 
         resized_input = torch.cat([black_tensor, white_tensor, base_guess], dim=1)
         resized_label = images
@@ -286,7 +281,7 @@ def output_loops(loops, noise_percent):
     black_pixels = torch.clone(input_images[:, 0:784])
     white_pixels = torch.clone(input_images[:, 784:784 * 2])
     original_images = torch.lt(black_pixels, white_pixels)
-    original_images= original_images.view(batch_size, 28,28)
+    original_images= original_images.view(batch_size, 1, 28,28)
 
     mask = np.random.choice([False, True], size=black_pixels.size(), replace=True, p=noise)
     mask_tensor = torch.tensor(mask, dtype=torch.float32)
