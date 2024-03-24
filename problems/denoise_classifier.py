@@ -1,7 +1,11 @@
 import torch
 from problems.problem_interface import ProblemInterface
 
+
 class DenoiseClassifier(ProblemInterface):
+    """
+    Problem class for the regular denoiser classifier
+    """
     def create_custom_input_data(self, image, label):
         image_crushed = image.view(image.size(0), -1)
         correct_label = torch.zeros(1, 10)

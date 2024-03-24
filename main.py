@@ -32,7 +32,7 @@ def main():
     learning_rate = 0.0001
 
     problem.setupWandb(model)
-    problem.beginTraining(model, criterion_function, learning_rate)
+    model = problem.beginTraining(model, criterion_function, learning_rate)
     problem.evaluateTrainingModel(model)
 
 
