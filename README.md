@@ -70,6 +70,7 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
+    <li><a href="#project-structure">Project Structure</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -174,7 +175,23 @@ python main.py [model-type] [wrong-hint] [wrong-eval] [max-loops] [epochs-per-lo
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## Project Structure
 
+The project is seperated into three parts, the main files, the models folder, and the problems folder.
+
+1. Main Files:
+   - These are `main.py` and `main.sh`, which is used to actually run the program. `main.py` contains the logic for running the code
+   using the user specified parameters, and `main.sh` is used to run it in SLURM
+2. Models Folder:
+   - This folder contains the various different model types. `models_interfaces.py` contains classes with the base model
+   logic that can be overriden for more specific logic
+   - `nn_continuous.py` contains the two Hadamard continuous models
+   - `nn_discontinuous.py` contains the two Piecewise discontinuous models
+3. Problems Folder:
+   - This folder contains the different models to test the models on as well as the logic to train and evaluate them
+   - `problem_interface.py` contains the base logic of training and evaluating a model against a specific problem
+   - `denoise_classifier.py` is logic for the problem of denonising and classifying and MNIST image
+   - `image_as_classification.py` is logic for treating the entire MNIST image as a black and white classification problem
 
 <!-- ROADMAP -->
 ## Roadmap
