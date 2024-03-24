@@ -29,11 +29,12 @@ def main():
     else:
         criterion_function = nn.CrossEntropyLoss()
 
-
     learning_rate = 0.0001
+
     problem.setupWandb(model)
     problem.beginTraining(model, criterion_function, learning_rate)
     problem.evaluateTrainingModel(model)
+
 
 def createModel(problem, principal_components, model_number):
     U = problem.getU()
