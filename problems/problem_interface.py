@@ -319,6 +319,13 @@ class ProblemInterface:
             self.run.log({f'Noise: {noise_item}': examples})
 
     def runEvaluation(self, loops, noise_percent, model):
+        """
+        Run an evaluation test to save the results to wandb
+        :param loops: Number of loops to test the model on
+        :param noise_percent: Percent of noise in image
+        :param model: Which model to use
+        :return: Evaluation image to save in wandb
+        """
         dataiter = iter(self.test_loader)
         images, labels = next(dataiter)
         images = images.view(images.size(0), -1)
@@ -374,11 +381,25 @@ class CustomImageDataset(Dataset):
     Creates custom dataset for the images and their labels
     """
     def __init__(self, image_tensors, image_labels):
+        """
+        Create the dataset from images and labels
+        :param image_tensors: Images
+        :param image_labels: Labels
+        """
         self.images = image_tensors
         self.labels = image_labels
 
     def __len__(self):
+        """
+        Get the number of images
+        :return: int for number of images
+        """
         return len(self.labels)
 
     def __getitem__(self, idx):
+        """
+        Get a specific image and label combination
+        :param idx: Index in the array
+        :return: The specific image/label
+        """
         return self.images[idx], self.labels[idx]

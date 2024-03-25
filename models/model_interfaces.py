@@ -3,7 +3,18 @@ import torch
 
 
 class Case1ModelInterface(nn.Module):
+    """
+    The different cases for the PCA initialized models
+    """
     def __init__(self, initialU1, initialU2, initialV, initialB1, initialB2):
+        """
+        Initialize the parameters that create the weights
+        :param initialU1:
+        :param initialU2:
+        :param initialV:
+        :param initialB1:
+        :param initialB2:
+        """
         super(Case1ModelInterface, self).__init__()
         self.U1 = nn.Parameter(torch.clone(initialU1), requires_grad=True)
         self.U2 = nn.Parameter(torch.clone(initialU2), requires_grad=True)
@@ -20,6 +31,13 @@ class Case1ModelInterface(nn.Module):
 
 class Case2ModelInterface(nn.Module):
     def __init__(self, initialW1, initialW2, initialB1, initialB2):
+        """
+        Initialize the weights beforehand and do gradient descent on them instead
+        :param initialW1:
+        :param initialW2:
+        :param initialB1:
+        :param initialB2:
+        """
         super(Case2ModelInterface, self).__init__()
         self.W1 = nn.Parameter(torch.clone(initialW1), requires_grad=True)
         self.W2 = nn.Parameter(torch.clone(initialW2), requires_grad=True)
