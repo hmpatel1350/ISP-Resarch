@@ -94,9 +94,9 @@ as analyzing their behavior and results using Dynamical Systems.
 
 ### Built With
 
-* ![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=for-the-badge&logo=PyTorch&logoColor=white)
-* ![Matplotlib](https://img.shields.io/badge/Matplotlib-%23ffffff.svg?style=for-the-badge&logo=Matplotlib&logoColor=black)
-* ![NumPy](https://img.shields.io/badge/numpy-%23013243.svg?style=for-the-badge&logo=numpy&logoColor=white)
+* [![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=for-the-badge&logo=PyTorch&logoColor=white)](https://pytorch.org/)
+* [![Matplotlib](https://img.shields.io/badge/Matplotlib-%23ffffff.svg?style=for-the-badge&logo=Matplotlib&logoColor=black)](https://matplotlib.org/)
+* [![NumPy](https://img.shields.io/badge/numpy-%23013243.svg?style=for-the-badge&logo=numpy&logoColor=white)](https://numpy.org/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -219,7 +219,7 @@ N/A
 
 Harsh Patel - hmpatel@wpi.edu
 
-Project Link: [https://github.com/hmpatel1350/ISP-Resarch](https://github.com/github_username/repo_name)
+Project Link: https://github.com/hmpatel1350/ISP-Resarch
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

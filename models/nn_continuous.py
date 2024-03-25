@@ -2,7 +2,6 @@
 import torch
 from models.model_interfaces import Case1ModelInterface, Case2ModelInterface
 
-
 class HadamardCase1(Case1ModelInterface):
     def forward(self, x):
         factor1 = torch.add(x @ (self.U1 @ self.V).T, self.B1)
