@@ -3,8 +3,8 @@
 #SBATCH -n 1
 #SBATCH -p short
 #SBATCH --gres=gpu:1
-#SBATCH -J "2 True True 1 1 2 2"
+#SBATCH -J "1 False False 10 10 1 1"
 #SBATCH -C A100|V100
 module load cuda
 source ./venv/bin/activate
-python ./main.py 2 True True 1 1 2 2
+python ./main.py 1 False False 10 10 1 1

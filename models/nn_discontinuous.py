@@ -1,6 +1,6 @@
 # define the NN architecture
 import torch
-from models.model_interfaces import Case1ModelInterface, Case2ModelInterface
+from models.model_interfaces import Case1ModelInterface, Case2ModelInterface, Case3ModelInterface
 
 
 class PiecewiseCase1(Case1ModelInterface):
@@ -25,3 +25,15 @@ class PiecewiseCase2(Case2ModelInterface):
 
     def __str__(self):
         return "PiecewiseCase2"
+
+
+class PiecewiseCase3(Case3ModelInterface):
+    def forward(self, x):
+        negative_factor = self.model1(x)
+        positive_factor = self.model2(x)
+
+        out = torch.where(x < 0, negative_factor, positive_factor)
+        return out
+
+    def __str__(self):
+        return "PiecewiseCase3"

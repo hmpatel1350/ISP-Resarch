@@ -49,3 +49,22 @@ class Case2ModelInterface(nn.Module):
 
     def __str__(self):
         return "GenericCase2"
+
+
+class Case3ModelInterface(nn.Module):
+    def __init__(self, model1, model2):
+        """
+        Initialize as 2 different models
+        :param model1:
+        :param model2:
+        """
+        super(Case3ModelInterface, self).__init__()
+        self.model1 = model1
+        self.model2 = model2
+
+    def forward(self, x):
+        return x
+
+    def __str__(self):
+        return "GenericCase3"
+

@@ -1,6 +1,7 @@
 # define the NN architecture
 import torch
-from models.model_interfaces import Case1ModelInterface, Case2ModelInterface
+from models.model_interfaces import Case1ModelInterface, Case2ModelInterface, Case3ModelInterface
+
 
 class HadamardCase1(Case1ModelInterface):
     def forward(self, x):
@@ -12,6 +13,8 @@ class HadamardCase1(Case1ModelInterface):
 
     def __str__(self):
         return "HadamardCase1"
+
+
 class HadamardCase2(Case2ModelInterface):
     def forward(self, x):
         factor1 = torch.add(x @ self.W1.T, self.B1)
@@ -22,3 +25,15 @@ class HadamardCase2(Case2ModelInterface):
 
     def __str__(self):
         return "HadamardCase2"
+
+
+class HadamardCase3(Case3ModelInterface):
+    def forward(self, x):
+        factor1 = self.model1(x)
+        factor2 = self.model2(x)
+
+        out = torch.mul(factor1, factor2)
+        return out
+
+    def __str__(self):
+        return "HadamardCase3"

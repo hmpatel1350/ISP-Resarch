@@ -99,13 +99,15 @@ class ProblemInterface:
         # Gets the U value from SVD
         self.U = self.createManifoldParamaters(train_custom_dataset)
 
-    def setupWandb(self, model):
+    def setupWandb(self, model, learning_rate, criterion_function):
         """
         Creates the wandb run info
+        :param criterion_function:
+        :param learning_rate:
         :param model: The model being used for this run
         :return: The wandb run object
         """
-        self.run = self.wandbRunInfo(model)
+        self.run = self.wandbRunInfo(model, learning_rate, criterion_function)
 
     def beginTraining(self, model, criterion_function, learning_rate):
         """
@@ -116,12 +118,13 @@ class ProblemInterface:
         :return:
         """
 
-        optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
+        #optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
         for epoch in range(1, self.n_epochs + 1):
             # monitor training loss
             train_loss = 0.0
             loops = (epoch - 1) // self.epochs_per_loop + 1
+            optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate/ loops)
 
             ###################
             # train the model #
@@ -161,7 +164,7 @@ class ProblemInterface:
                     loss = criterion_function(outputs, clean_images)
                     total_loss += loss * (i + 1)
 
-                wandb.log({"final_loss": loss.item()})
+                wandb.log({"final_index_loss": loss.item()})
                 # backward pass: compute gradient of the loss with respect to model parameters
                 total_loss.backward()
                 # perform a single optimization step (parameter update)
@@ -170,7 +173,8 @@ class ProblemInterface:
                 # update running training loss
                 train_loss += loss.item()
             # Logs the values to wandb
-            wandb.log({"epoch_step": epoch, "final_index_loss": train_loss})
+            train_loss = train_loss / len(self.train_loader)
+            wandb.log({"epoch_step": epoch, "average_epoch_loss": train_loss})
         return model
 
     def getInputGuessesTraining(self, mask_tensor, labels):
@@ -259,18 +263,21 @@ class ProblemInterface:
             data_labels.append(new_label)
         return data_images, data_labels
 
-    def run_name(self, model):
+    def run_name(self, model, learning_rate, criterion_function):
         """
         Sets the current wandb run name
+        :param learning_rate:
         :param model: Model to use for this run
         :return: String for the wandb name
         """
-        return ("Model:{}-Epochs:{}-WrongHint:{}-WrongEval:{}"
-                .format(str(model), self.n_epochs, self.wrong_hint, self.wrong_eval))
+        return ("Model:{}-Epochs:{}-WrongHint:{}-WrongEval:{}-LearningRate:{}-Criterion:{}"
+                .format(str(model), self.n_epochs, self.wrong_hint, self.wrong_eval,
+                        learning_rate, str(criterion_function)))
 
-    def run_config(self, model):
+    def run_config(self, model, learning_rate, criterion_function):
         """
         Sets the wandb run configs
+        :param learning_rate:
         :param model: Model for this run
         :return: Dict for the run configs
         """
@@ -282,11 +289,15 @@ class ProblemInterface:
             "epochs_per_loop": self.epochs_per_loop,
             "n_epochs": self.n_epochs,
             "principal_components": self.principal_components,
+            "learning_rate": learning_rate,
+            "criterion_function": str(criterion_function),
         }
 
-    def wandbRunInfo(self, model):
+    def wandbRunInfo(self, model, learning_rate, criterion_function):
         """
         Creates the wandb run object
+        :param criterion_function:
+        :param learning_rate:
         :param model: Model to use
         :return: run object for wandb
         """
@@ -294,12 +305,12 @@ class ProblemInterface:
             # Set the project where this run will be logged
             project=self.problem_name(),
 
-            name=self.run_name(model),
+            name=self.run_name(model, learning_rate, criterion_function),
             # Track hyperparameters and run metadata
-            config=self.run_config(model),
+            config=self.run_config(model, learning_rate, criterion_function),
         )
         wandb.define_metric("epoch_step")
-        wandb.define_metric("final_index_loss", step_metric="epoch_step")
+        wandb.define_metric("average_epoch_loss", step_metric="epoch_step")
         return run
 
     def evaluateTrainingModel(self, model):
