@@ -59,6 +59,7 @@ class ProblemInterface:
         """
         self.run = None
         self.U = None
+        self.X = None
         self.train_loader = None
         self.test_loader = None
 
@@ -118,13 +119,13 @@ class ProblemInterface:
         :return:
         """
 
-        #optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
+        # optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
         for epoch in range(1, self.n_epochs + 1):
             # monitor training loss
             train_loss = 0.0
             loops = (epoch - 1) // self.epochs_per_loop + 1
-            optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate/ loops)
+            optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate / loops)
 
             ###################
             # train the model #
@@ -192,7 +193,7 @@ class ProblemInterface:
             else:
                 random_integer = 0
 
-            base_guess[i][labels[i].item() - random_integer] = 0.1 + 0.9 * s[i] / 784
+            base_guess[i][labels[i].item() - random_integer] = 0.1 + 0.9 * (1.0 - s[i] / 784)
         return base_guess
 
     def getInputGuessesEvaluation(self, mask_tensor, labels):
@@ -210,7 +211,7 @@ class ProblemInterface:
             else:
                 eval_hint = 0
 
-            base_guess[i][labels[i].item() - eval_hint] = 0.1 + 0.9 * s[i] / 784
+            base_guess[i][labels[i].item() - eval_hint] = 0.1 + 0.9 * (1.0 - s[i] / 784)
         return base_guess
 
     def getU(self):
@@ -246,6 +247,7 @@ class ProblemInterface:
         mnist_tensor = torch.stack(train_images, dim=1)
 
         X = mnist_tensor.view(len(mnist_tensor[0]), len(mnist_tensor[0][0])).float().T
+        self.X = X
         U, S, V = torch.svd(X)
         return U
 
@@ -270,7 +272,7 @@ class ProblemInterface:
         :param model: Model to use for this run
         :return: String for the wandb name
         """
-        return ("Model:{}-Epochs:{}-WrongHint:{}-WrongEval:{}-LearningRate:{}-Criterion:{}"
+        return ("2Tanh  ToSigmoid-Model:{}-Epochs:{}-WrongHint:{}-WrongEval:{}-LearningRate:{}-Criterion:{}"
                 .format(str(model), self.n_epochs, self.wrong_hint, self.wrong_eval,
                         learning_rate, str(criterion_function)))
 
@@ -320,13 +322,16 @@ class ProblemInterface:
         :return: Returns the evaluation info in wandb
         """
         noise_list = [0.05, 0.25, 0.50, 0.75, 1.00]
-
+        loop_list = [1, 3, 5, 10, 20, 50, 100]
         output_loops = self.runEvaluation
         for noise_item in noise_list:
+            """
             examples = [output_loops(1, noise_item, model), output_loops(3, noise_item, model),
                         output_loops(5, noise_item, model),
                         output_loops(10, noise_item, model),
                         output_loops(20, noise_item, model), output_loops(100, noise_item, model)]
+            """
+            examples = [output_loops(loop_item, noise_item, model) for loop_item in loop_list]
             self.run.log({f'Noise: {noise_item}': examples})
 
     def runEvaluation(self, loops, noise_percent, model):
@@ -391,6 +396,7 @@ class CustomImageDataset(Dataset):
     """
     Creates custom dataset for the images and their labels
     """
+
     def __init__(self, image_tensors, image_labels):
         """
         Create the dataset from images and labels

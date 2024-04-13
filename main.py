@@ -61,22 +61,22 @@ def createModel(problem, principal_components, model_number):
         learning_rate = 0.0001
         model = nn_discontinuous.PiecewiseCase2(W, W, B_zeros, B_zeros)
     elif model_number == 5:
-        learning_rate = 0.00001
+        learning_rate = 0.0001
         model1 = nn_discontinuous.PiecewiseCase2(W, W, B_zeros, B_zeros)
         model2 = nn_discontinuous.PiecewiseCase2(W_zeros, W_zeros, B_ones, B_ones)
         model = nn_continuous.HadamardCase3(model1, model2)
     elif model_number == 6:
-        learning_rate = 0.00001
+        learning_rate = 0.0001
         model1 = nn_continuous.HadamardCase2(W, W_zeros, B_zeros, B_ones)
         model2 = nn_continuous.HadamardCase2(W, W_zeros, B_zeros, B_ones)
         model = nn_discontinuous.PiecewiseCase3(model1, model2)
     elif model_number == 7:
-        learning_rate = 0.00001
+        learning_rate = 0.0001
         model1 = nn_discontinuous.PiecewiseCase1(U1, U1, U1.T, B_zeros, B_zeros)
         model2 = nn_discontinuous.PiecewiseCase1(U1_zeros, U1_zeros, U1_zeros.T, B_ones, B_ones)
         model = nn_continuous.HadamardCase3(model1, model2)
     elif model_number == 8:
-        learning_rate = 0.00001
+        learning_rate = 0.0001
         model1 = nn_continuous.HadamardCase1(U1, U1_zeros, U1.T, B_zeros, B_ones)
         model2 = nn_continuous.HadamardCase1(U1, U1_zeros, U1.T, B_zeros, B_ones)
         model = nn_discontinuous.PiecewiseCase3(model1, model2)

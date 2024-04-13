@@ -9,6 +9,7 @@ class HadamardCase1(Case1ModelInterface):
         factor2 = torch.add(x @ (self.U2 @ self.V).T, self.B2)
 
         out = torch.mul(factor1, factor2)
+        # out = torch.sigmoid(out)
         return out
 
     def __str__(self):
@@ -21,6 +22,8 @@ class HadamardCase2(Case2ModelInterface):
         factor2 = torch.add(x @ self.W2.T, self.B2)
 
         out = torch.mul(factor1, factor2)
+        # out = torch.sigmoid(out)
+
         return out
 
     def __str__(self):
@@ -30,9 +33,13 @@ class HadamardCase2(Case2ModelInterface):
 class HadamardCase3(Case3ModelInterface):
     def forward(self, x):
         factor1 = self.model1(x)
+        factor1 = torch.tanh(factor1)
         factor2 = self.model2(x)
+        factor2 = torch.tanh(factor2)
 
         out = torch.mul(factor1, factor2)
+        out = torch.sigmoid(out)
+
         return out
 
     def __str__(self):

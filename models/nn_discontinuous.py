@@ -9,6 +9,8 @@ class PiecewiseCase1(Case1ModelInterface):
         positive_factor = torch.add(x @ (self.U2 @ self.V).T, self.B2)
 
         out = torch.where(x < 0, negative_factor, positive_factor)
+        #out = torch.sigmoid(out)
+
         return out
 
     def __str__(self):
@@ -21,6 +23,8 @@ class PiecewiseCase2(Case2ModelInterface):
         positive_factor = torch.add(x @ self.W2.T, self.B2)
 
         out = torch.where(x < 0, negative_factor, positive_factor)
+        #out = torch.sigmoid(out)
+
         return out
 
     def __str__(self):
@@ -30,9 +34,13 @@ class PiecewiseCase2(Case2ModelInterface):
 class PiecewiseCase3(Case3ModelInterface):
     def forward(self, x):
         negative_factor = self.model1(x)
+        negative_factor = torch.tanh(negative_factor)
         positive_factor = self.model2(x)
+        positive_factor = torch.tanh(positive_factor)
 
         out = torch.where(x < 0, negative_factor, positive_factor)
+        out = torch.sigmoid(out)
+
         return out
 
     def __str__(self):
